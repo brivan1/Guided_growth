@@ -57,6 +57,13 @@ nav.scrolled {
   color: var(--bark);
   font-style: italic;
 }
+.logo-img {
+  width: auto;
+  height: 100px;
+  background: var(--moss);
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
 
 .nav-links {
   display: flex;
@@ -108,12 +115,12 @@ nav.scrolled {
   transition: 0.3s;
 }
 
-/*G_G HERO SECTION*/
+/*G_G  SECTION*/
 #G_G {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  padding-top: 80px;
+  padding-top: 150px;
   overflow: hidden;
 }
 
@@ -127,7 +134,7 @@ nav.scrolled {
 .G_G-tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1.5rem;
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.1em;
@@ -220,6 +227,7 @@ nav.scrolled {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 20px;
 }
 
 .G_G-art {
@@ -645,7 +653,7 @@ footer {
   margin-bottom: 3rem;
 }
 
-.footer-brand .logo {
+.footer-brand .logo-img {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.7rem;
   font-weight: 600;
