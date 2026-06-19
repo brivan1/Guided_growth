@@ -1,8 +1,25 @@
-const API_BASE = window.location.hostname === 'localhost'
-  ? 'http://localhost:5001'
-  : 'https://guided-growth.vercel.app/';
+const LOCAL_API_BASE = 'http://localhost:5001';
+const REMOTE_HOST = 'guided-growth.vercel.app';
 
+// When the form is loaded from the live Vercel page, send submissions to the local server.
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === REMOTE_HOST
+  ? LOCAL_API_BASE
+  : `https://${REMOTE_HOST}`;
 
+const STORAGE_KEY = 'guidedGrowthContactSubmissions';
+
+function saveSubmissionLocally(submission) {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  saved.push({
+    ...submission,
+    savedAt: new Date().toISOString()
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+}
+
+function getSavedSubmissions() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+}
 
 const hamburger = document.getElementById('hamburger');
 const navLinks  = document.getElementById('navLinks');
@@ -74,6 +91,8 @@ contactForm.addEventListener('submit', async (event) => {
   // Set loading state
   submitBtn.textContent = 'Sending...';
   submitBtn.disabled           = true;
+
+  saveSubmissionLocally(formData);
 
   try {
     const response = await fetch(`${API_BASE}/api/contact`, {

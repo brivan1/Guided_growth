@@ -34,5 +34,20 @@ app.post('/api/contact', (req, res) => {
   res.status(200).json({ success: true });
 });
 
+app.get('/api/submissions', (req, res) => {
+  if (!fs.existsSync(DATA_FILE)) {
+    return res.status(200).json([]);
+  }
+
+  try {
+    const fileData = fs.readFileSync(DATA_FILE, 'utf8');
+    const contacts = JSON.parse(fileData || '[]');
+    res.status(200).json(contacts);
+  } catch (error) {
+    console.error('Failed to read submissions:', error);
+    res.status(500).json({ success: false, message: 'Unable to load submissions' });
+  }
+});
+
 const PORT = 5001;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
