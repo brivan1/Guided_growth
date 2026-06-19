@@ -47,20 +47,51 @@ fadeElements.forEach(el => revealObserver.observe(el));
 /* form submission*/
 const contactForm = document.getElementById('contactForm');
 const submitBtn   = document.getElementById('submitBtn');
+const phoneInput  = document.getElementById('phone');
 
-contactForm.addEventListener('submit', (event) => {
+phoneInput.addEventListener('input', (e) => {
+  e.target.value = e.target.value.replace(/\D/g, '');
+});
+
+contactForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  // Confirm state
-  submitBtn.textContent        = '✓ Message Sent!';
-  submitBtn.style.background   = 'var(--bark)';
+  const formData = {
+    fname: document.getElementById('fname').value,
+    lname: document.getElementById('lname').value,
+    email: document.getElementById('email').value,
+    phone: document.getElementById('phone').value,
+    service: document.getElementById('service').value,
+    message: document.getElementById('message').value
+  };
+
+  // Set loading state
+  submitBtn.textContent = 'Sending...';
   submitBtn.disabled           = true;
 
-  // Reset after 3 seconds
-  setTimeout(() => {
-    submitBtn.textContent      = 'Send Message';
-    submitBtn.style.background = '';
-    submitBtn.disabled         = false;
-    contactForm.reset();
-  }, 3000);
+  try {
+    const response = await fetch('http://localhost:5000/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+
+    if (response.ok) {
+      submitBtn.textContent        = '✓ Message Sent!';
+      submitBtn.style.background   = 'var(--bark)';
+      
+      setTimeout(() => {
+        submitBtn.textContent      = 'Send Message';
+        submitBtn.style.background = '';
+        submitBtn.disabled         = false;
+        contactForm.reset();
+      }, 3000);
+    } else {
+      throw new Error('Server responded with an error');
+    }
+  } catch (error) {
+    console.error('Submission error:', error);
+    submitBtn.textContent = 'Error! Try again';
+    submitBtn.disabled = false;
+  }
 });

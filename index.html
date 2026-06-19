@@ -6,6 +6,15 @@
   <title>Guided Growth | Mental Health Community</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BSDBLH5GW4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-BSDBLH5GW4');
+</script>
 </head>
 <body>
 
@@ -244,7 +253,7 @@
       </div>
       <div>        
         <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" placeholder="+254..." />
+        <input type="tel" id="phone" placeholder="254..." pattern="[0-9]*" inputmode="numeric" title="Please enter only digits" />
       </div>
       <div>
       

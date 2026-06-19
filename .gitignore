@@ -1,10 +1,18 @@
 # Dependency directories
 node_modules/
+venv/
+env/
 
-# OS metadata
+# Local data files (to prevent committing user data)
+contacts.json
+data.json
+
+# Environment variables (sensitive info)
+.env
+
+# Python cache and bytecode
+__pycache__/
+*.pyc
+
+# Operating system files
 .DS_Store
-Thumbs.db
-
-# IDEs and editors
-.vscode/
-.idea/
