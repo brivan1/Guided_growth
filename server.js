@@ -8,7 +8,11 @@ const { connectDB, isConnected } = require('./db');
 const Contact = require('./models/Contact');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use(express.json());
 app.use(express.static(__dirname));
 
@@ -62,3 +66,25 @@ app.post('/api/contact', async (req, res) => {
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
+
+app.get('/api/contacts', async (req, res) => {
+  try {
+    if (isConnected()) {
+      const contacts = await Contact.find().sort({ submittedAt: -1 });
+      return res.status(200).json(contacts);
+    } else {
+      // Fallback to file
+      if (fs.existsSync(DATA_FILE)) {
+        const fileData = fs.readFileSync(DATA_FILE, 'utf8');
+        const contacts = JSON.parse(fileData || '[]');
+        return res.status(200).json(contacts);
+      }
+      return res.status(200).json([]);
+    }
+  } catch (err) {
+    console.error('Error retrieving contacts:', err);
+    res.status(500).json({ error: 'Failed to retrieve contacts' });
+  }
+});
+
