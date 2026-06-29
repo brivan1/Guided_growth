@@ -1,9 +1,9 @@
 const LOCAL_API_BASE = 'http://localhost:5001';
-const REMOTE_HOST = 'https://guided-growth.onrender.com';
+const REMOTE_HOST = 'guided-growth.onrender.com';
 
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === REMOTE_HOST
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? LOCAL_API_BASE
-  : `https://${REMOTE_HOST}`;
+  : `https://${window.location.hostname}`;
 
 const STORAGE_KEY = 'guidedGrowthContactSubmissions';
 
