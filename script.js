@@ -5,6 +5,9 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
   ? LOCAL_API_BASE
   : `https://${window.location.hostname}`;
 
+console.log('DEBUG: window.location.hostname =', window.location.hostname);
+console.log('DEBUG: API_BASE =', API_BASE);
+
 const STORAGE_KEY = 'guidedGrowthContactSubmissions';
 
 function saveSubmissionLocally(submission) {
@@ -73,6 +76,7 @@ phoneInput.addEventListener('input', (e) => {
 
 contactForm.addEventListener('submit', async (event) => {
   event.preventDefault();
+  console.log('DEBUG: Form submitted');
 
   const formData = {
     fname: document.getElementById('fname').value,
@@ -90,12 +94,14 @@ contactForm.addEventListener('submit', async (event) => {
   saveSubmissionLocally(formData);
 
   try {
+    console.log('DEBUG: Posting to', `${API_BASE}/api/contact`);
     const response = await fetch(`${API_BASE}/api/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
     });
 
+    console.log('DEBUG: Response received, status:', response.status);
     if (response.ok) {
       submitBtn.textContent        = '✓ Message Sent!';
       submitBtn.style.background   = 'var(--bark)';
@@ -110,7 +116,7 @@ contactForm.addEventListener('submit', async (event) => {
       throw new Error('Server responded with an error');
     }
   } catch (error) {
-    console.error('Submission error:', error);
+    console.error('DEBUG: Submission error:', error);
     submitBtn.textContent = 'Error! Try again';
     submitBtn.disabled = false;
   }
