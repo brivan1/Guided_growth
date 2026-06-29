@@ -1,5 +1,5 @@
 const LOCAL_API_BASE = 'http://localhost:5001';
-const REMOTE_HOST = 'guided-growth.vercel.app';
+const REMOTE_HOST = 'https://guided-growth.onrender.com';
 
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === REMOTE_HOST
   ? LOCAL_API_BASE
