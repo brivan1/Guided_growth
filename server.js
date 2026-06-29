@@ -2,6 +2,10 @@ const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
 const path = require('path');
+require('dotenv').config();
+
+const { connectDB, isConnected } = require('./db');
+const Contact = require('./models/Contact');
 
 const app = express();
 app.use(cors());
@@ -10,9 +14,27 @@ app.use(express.static(__dirname));
 
 const DATA_FILE = path.join(__dirname, 'contacts.json');
 
-app.post('/api/contact', (req, res) => {
+// attempt DB connection (if MONGODB_URI provided)
+connectDB().catch(() => {
+  console.warn('Continuing without MongoDB');
+});
+
+app.post('/api/contact', async (req, res) => {
   if (req.body.phone && !/^\d+$/.test(req.body.phone)) {
     return res.status(400).json({ success: false, message: 'Phone number must contain only digits' });
+  }
+
+  // Try to save to MongoDB when connected, otherwise fallback to file
+  if (isConnected()) {
+    try {
+      const doc = new Contact({ ...req.body, submittedAt: new Date() });
+      await doc.save();
+      console.log('New contact saved to MongoDB');
+      return res.status(200).json({ success: true });
+    } catch (err) {
+      console.error('Failed to save to MongoDB, falling back to file:', err.message || err);
+      // fall through to file fallback
+    }
   }
 
   const newEntry = {
@@ -24,7 +46,11 @@ app.post('/api/contact', (req, res) => {
   let contacts = [];
   if (fs.existsSync(DATA_FILE)) {
     const fileData = fs.readFileSync(DATA_FILE, 'utf8');
-    contacts = JSON.parse(fileData || '[]');
+    try {
+      contacts = JSON.parse(fileData || '[]');
+    } catch (e) {
+      contacts = [];
+    }
   }
 
   contacts.push(newEntry);
@@ -34,20 +60,5 @@ app.post('/api/contact', (req, res) => {
   res.status(200).json({ success: true });
 });
 
-app.get('/api/submissions', (req, res) => {
-  if (!fs.existsSync(DATA_FILE)) {
-    return res.status(200).json([]);
-  }
-
-  try {
-    const fileData = fs.readFileSync(DATA_FILE, 'utf8');
-    const contacts = JSON.parse(fileData || '[]');
-    res.status(200).json(contacts);
-  } catch (error) {
-    console.error('Failed to read submissions:', error);
-    res.status(500).json({ success: false, message: 'Unable to load submissions' });
-  }
-});
-
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

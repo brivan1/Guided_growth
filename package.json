@@ -4,6 +4,12 @@
   "main": "server.js",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "dotenv": "^16.1.4",
+    "express": "^4.19.2",
+    "mongodb": "^7.4.0",
+    "mongoose": "^7.5.0"
+  },
+  "scripts": {
+    "start": "node server.js"
   }
 }
