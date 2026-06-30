@@ -3,7 +3,7 @@ const REMOTE_HOST = 'guided-growth.onrender.com';
 
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? LOCAL_API_BASE
-  : `https://${window.location.hostname}`;
+  : `https://${REMOTE_HOST}`;
 
 console.log('DEBUG: window.location.hostname =', window.location.hostname);
 console.log('DEBUG: API_BASE =', API_BASE);
