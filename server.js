@@ -9,12 +9,15 @@ const Contact = require('./models/Contact');
 
 const app = express();
 app.use(cors({
-  origin: '*',
+  origin: [
+    'http://localhost:5001',
+    'https://guided-growth.vercel.app/',
+  ],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type']
 }));
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'public')));
 
 const DATA_FILE = path.join(__dirname, 'contacts.json');
 
@@ -87,4 +90,3 @@ app.get('/api/contacts', async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve contacts' });
   }
 });
-
