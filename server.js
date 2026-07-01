@@ -10,12 +10,12 @@ const Contact = require('./models/Contact');
 const app = express();
 app.use(cors({
   origin: [
-    'http://localhost:5001',
-    'https://guided-growth.vercel.app/',
+    'https://guided-growth.vercel.app'
   ],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type']
 }));
+app.options('*', cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -69,6 +69,7 @@ app.post('/api/contact', async (req, res) => {
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
 
 
 app.get('/api/contacts', async (req, res) => {
