@@ -1,20 +1,38 @@
-const LOCAL_API_BASE = 'http://localhost:5001';
-const REMOTE_HOST = 'guided-growth-api.onrender.com';
+/* ══════════════════════════════════════════
+   GUIDED GROWTH — events.js
+   Script for events.html
+   ══════════════════════════════════════════ */
 
+/* ── API CONFIG ── */
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? LOCAL_API_BASE
-  : `https://${REMOTE_HOST}`;
+  ? 'http://localhost:5001'
+  : 'https://guided-growth-api.onrender.com';
 
-console.log('DEBUG: window.location.hostname =', window.location.hostname);
-console.log('DEBUG: API_BASE =', API_BASE);
+/* ── SESSION ── */
+const SESSION_KEY = 'gg_admin_token';
+function getToken()  { return sessionStorage.getItem(SESSION_KEY); }
+function setToken(t) { sessionStorage.setItem(SESSION_KEY, t); }
 
-window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 20));
- 
-hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
- 
+
+/* ══════════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════════ */
+const navbar    = document.getElementById('navbar');
+const hamburger = document.getElementById('hamburger');
+const navLinks  = document.getElementById('navLinks');
+
+window.addEventListener('scroll', () =>
+  navbar.classList.toggle('scrolled', window.scrollY > 20)
+);
+
+hamburger.addEventListener('click', () =>
+  navLinks.classList.toggle('open')
+);
+
 navLinks.querySelectorAll('a').forEach(a =>
   a.addEventListener('click', () => navLinks.classList.remove('open'))
 );
+
 
 /* ══════════════════════════════════════════
    SCROLL REVEAL
@@ -28,76 +46,118 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12 });
 
+
 /* ══════════════════════════════════════════
    ADMIN LOGIN MODAL
+   Opens immediately on button click —
+   server is only called when Sign In is pressed.
    ══════════════════════════════════════════ */
 const modal         = document.getElementById('adminModal');
 const modalError    = document.getElementById('modalError');
 const modalLoginBtn = document.getElementById('modalLoginBtn');
- 
-/* Open modal — or skip straight to panel if already logged in */
+const adminUserEl   = document.getElementById('adminUser');
+const adminPassEl   = document.getElementById('adminPass');
+
+/* ── Open ── */
 document.getElementById('adminAccessBtn').addEventListener('click', () => {
-  if (getToken()) { window.location.href = 'admin.html'; return; }
-  modal.classList.add('open');
-  document.getElementById('adminUser').focus();
+  /* Already logged in → go straight to panel */
+  if (getToken()) {
+    window.location.href = 'admin.html';
+    return;
+  }
+  openModal();
 });
- 
-/* Close modal */
-document.getElementById('modalClose').addEventListener('click', closeModal);
-modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
- 
+
+function openModal() {
+  modal.classList.add('open');
+  /* Small delay so the transition plays after display kicks in */
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => adminUserEl.focus());
+  });
+}
+
+/* ── Close ── */
 function closeModal() {
   modal.classList.remove('open');
   modalError.style.display = 'none';
-  document.getElementById('adminUser').value = '';
-  document.getElementById('adminPass').value = '';
+  modalError.textContent   = '';
+  adminUserEl.value        = '';
+  adminPassEl.value        = '';
+  modalLoginBtn.textContent = 'Sign In';
+  modalLoginBtn.disabled    = false;
 }
- 
-/* Login */
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+
+/* Click outside modal box to close */
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) closeModal();
+});
+
+/* Escape key to close */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+});
+
+/* ── Login submit ── */
 async function tryLogin() {
-  const username = document.getElementById('adminUser').value.trim();
-  const password = document.getElementById('adminPass').value;
-  modalError.style.display = 'none';
- 
+  const username = adminUserEl.value.trim();
+  const password = adminPassEl.value;
+
+  /* Client-side empty check */
   if (!username || !password) {
-    modalError.textContent   = 'Please enter both username and password.';
-    modalError.style.display = 'block';
+    showModalError('Please enter both username and password.');
     return;
   }
- 
+
   modalLoginBtn.textContent = 'Signing in...';
   modalLoginBtn.disabled    = true;
- 
+  modalError.style.display  = 'none';
+
   try {
     const res  = await fetch(`${API_BASE}/api/admin/login`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ username, password })
     });
+
     const data = await res.json();
- 
+
     if (res.ok && data.token) {
+      /* Success — store token and go to admin panel */
       setToken(data.token);
       window.location.href = 'admin.html';
     } else {
-      modalError.textContent   = data.message || 'Incorrect username or password.';
-      modalError.style.display = 'block';
+      showModalError(data.message || 'Incorrect username or password.');
     }
+
   } catch {
-    modalError.textContent   = 'Could not reach server. Please try again.';
-    modalError.style.display = 'block';
+    showModalError('Could not reach the server. Please check your connection or try again shortly.');
   } finally {
     modalLoginBtn.textContent = 'Sign In';
     modalLoginBtn.disabled    = false;
   }
 }
- 
+
+function showModalError(msg) {
+  modalError.textContent   = msg;
+  modalError.style.display = 'block';
+}
+
+/* Button click */
 modalLoginBtn.addEventListener('click', tryLogin);
-document.getElementById('adminPass').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
-document.getElementById('adminUser').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('adminPass').focus(); });
- 
- 
+
+/* Enter key on password → submit */
+adminPassEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') tryLogin();
+});
+
+/* Enter key on username → move to password */
+adminUserEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') adminPassEl.focus();
+});
+
+
 /* ══════════════════════════════════════════
    EVENTS — HELPERS
    ══════════════════════════════════════════ */
@@ -109,7 +169,7 @@ function badgeClass(type) {
     'Seminar':       'badge-seminar'
   }[type] || 'badge-support';
 }
- 
+
 function formatDate(str) {
   const d = new Date(str);
   return {
@@ -117,8 +177,8 @@ function formatDate(str) {
     month: d.toLocaleString('default', { month: 'short' }).toUpperCase()
   };
 }
- 
- 
+
+
 /* ══════════════════════════════════════════
    EVENTS — BUILD CARD
    ══════════════════════════════════════════ */
@@ -152,14 +212,14 @@ function buildCard(event, isPast) {
       </div>
     </div>`;
 }
- 
- 
+
+
 /* ══════════════════════════════════════════
    EVENTS — RENDER
    ══════════════════════════════════════════ */
 let allEvents    = [];
 let activeFilter = 'all';
- 
+
 function renderEvents(events) {
   const now      = new Date();
   const upcoming = events
@@ -168,7 +228,7 @@ function renderEvents(events) {
   const past = events
     .filter(e => new Date(e.date) < now)
     .sort((a, b) => new Date(b.date) - new Date(a.date));
- 
+
   /* Upcoming */
   document.getElementById('upcomingLoading').style.display = 'none';
   const ug = document.getElementById('upcomingGrid');
@@ -182,7 +242,7 @@ function renderEvents(events) {
          No upcoming events right now —
          <a href="index.html#gethelp" style="color:var(--moss)">get in touch</a> to be notified.
        </div>`;
- 
+
   /* Past */
   document.getElementById('pastLoading').style.display = 'none';
   const pg = document.getElementById('pastGrid');
@@ -192,12 +252,14 @@ function renderEvents(events) {
   pg.innerHTML = past.length
     ? past.map(e => buildCard(e, true)).join('')
     : `<div class="empty-state"><span class="empty-icon">🌿</span>No past events yet.</div>`;
- 
-  /* Re-observe new fade-up cards */
-  document.querySelectorAll('.event-card.fade-up').forEach(el => revealObserver.observe(el));
+
+  /* Observe new cards for fade-in */
+  document.querySelectorAll('.event-card.fade-up').forEach(el =>
+    revealObserver.observe(el)
+  );
 }
- 
- 
+
+
 /* ══════════════════════════════════════════
    EVENTS — FILTER TABS
    ══════════════════════════════════════════ */
@@ -213,8 +275,8 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     );
   });
 });
- 
- 
+
+
 /* ══════════════════════════════════════════
    EVENTS — FETCH FROM API
    ══════════════════════════════════════════ */
@@ -232,6 +294,6 @@ async function loadEvents() {
     document.getElementById('pastLoading').innerHTML = '';
   }
 }
- 
+
 /* ── Init ── */
 loadEvents();
