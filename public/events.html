@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events & Programs | Guided Growth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="events.css" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BSDBLH5GW4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BSDBLH5GW4');
+  </script>
+</head>
+<body>
+ 
+<!-- ══ NAVIGATION ══ -->
+<nav id="navbar">
+  <a class="nav-logo" href="index.html">
+    <img src="GG_logo.jpg" alt="Guided Growth Logo" class="logo-img">
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html#gethelp" class="nav-cta">Get Help</a></li>
+    <li><button class="nav-admin-btn" id="adminAccessBtn">⚙ Admin</button></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+ 
+<!-- ══ HERO ══ -->
+<div class="events-hero">
+  <div class="events-hero-tag">What's On</div>
+  <h1>Events &amp; Programs</h1>
+  <p>Join us for workshops, support groups, and community outreach events designed to support your mental health journey.</p>
+</div>
+ 
+<!-- ══ ADMIN LOGIN MODAL ══ -->
+<div class="admin-modal-overlay" id="adminModal">
+  <div class="admin-modal">
+    <div class="admin-modal-header">
+      <h3>Admin Sign In</h3>
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-field">
+      <label for="adminUser">Username</label>
+      <input type="text" id="adminUser" placeholder="Enter username" autocomplete="username" />
+    </div>
+    <div class="modal-field">
+      <label for="adminPass">Password</label>
+      <input type="password" id="adminPass" placeholder="Enter password" autocomplete="current-password" />
+    </div>
+    <p class="modal-error" id="modalError">Incorrect username or password.</p>
+    <button class="btn-primary" id="modalLoginBtn" style="width:100%;text-align:center;cursor:pointer;">Sign In</button>
+  </div>
+</div>
+ 
+<!-- ══ FILTER BAR ══ -->
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All Events</button>
+  <button class="filter-btn" data-filter="Workshop">Workshops</button>
+  <button class="filter-btn" data-filter="Support Group">Support Groups</button>
+  <button class="filter-btn" data-filter="Outreach">Outreach</button>
+  <button class="filter-btn" data-filter="Seminar">Seminars</button>
+</div>
+ 
+<!-- ══ UPCOMING ══ -->
+<div class="events-section">
+  <div class="events-section-label">
+    <h2>Upcoming</h2>
+    <div class="ev-divider"></div>
+    <span class="ev-count" id="upcomingCount">Loading…</span>
+  </div>
+  <div class="loading-grid" id="upcomingLoading">
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+  </div>
+  <div class="events-grid" id="upcomingGrid" style="display:none;"></div>
+</div>
+ 
+<!-- ══ PAST EVENTS ══ -->
+<div class="events-section events-section-bg">
+  <div class="events-section-label">
+    <h2>Past Events</h2>
+    <div class="ev-divider"></div>
+    <span class="ev-count" id="pastCount">Loading…</span>
+  </div>
+  <div class="loading-grid" id="pastLoading">
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+  </div>
+  <div class="events-grid" id="pastGrid" style="display:none;"></div>
+</div>
+ 
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="GG_logo.jpg" alt="Guided Growth Logo" class="logo-img" style="margin-bottom:1rem;">
+      <p>A community rooted in compassion, dedicated to making mental health support accessible to all who need it.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="index.html#service-individual">Individual Counselling</a></li>
+        <li><a href="index.html#service-peer">Peer Support</a></li>
+        <li><a href="index.html#service-family">Family &amp; Youth Programs</a></li>
+        <li><a href="index.html#service-education">Mental Health Education</a></li>
+        <li><a href="index.html#service-support">Help Line</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Organisation</h4>
+      <ul>
+        <li><a href="index.html#about">About Us</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="#">Volunteer</a></li>
+        <li><a href="#">Donate</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:+254713009252">+254713009252</a></li>
+        <li><a href="https://guided-growth.vercel.app/" target="_blank" rel="noopener">Guided Growth Website</a></li>
+        <li><a href="index.html#gethelp">Find a Centre</a></li>
+        <li><a href="#">Referrals</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Guided Growth. All rights reserved.</span>
+    <span>Privacy Policy · Terms of Use · Accessibility</span>
+  </div>
+</footer>
+<script src="events.js"></script>
+</body>
+</html>

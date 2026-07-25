@@ -58,11 +58,13 @@ nav.scrolled {
   font-style: italic;
 }
 .logo-img {
+  display: block;
   width: auto;
-  height: 100px;
-  background: var(--moss);
-  border-radius: 50%;
-  margin-right: 0.5rem;
+  max-width: 220px;
+  max-height: 100px;
+  background: transparent;
+  border-radius: 50px;
+  object-fit: contain;
 }
 
 .nav-links {
@@ -304,31 +306,6 @@ nav.scrolled {
   50%       { transform: translateY(-8px); }
 }
 
-.G_G-stats-strip {
-  position: absolute;
-  top: 2rem;
-  right: -1.5rem;
-  background: var(--moss);
-  color: #fff;
-  border-radius: 0.75rem;
-  padding: 1rem 1.4rem;
-  box-shadow: 0 6px 24px rgba(61, 90, 62, 0.3);
-}
-
-.G_G-stats-strip .num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2rem;
-  font-weight: 600;
-  display: block;
-}
-
-.G_G-stats-strip .lbl {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.8;
-}
-
 section { padding: 5rem 8%; }
 
 .section-tag {
@@ -387,28 +364,6 @@ section { padding: 5rem 8%; }
   opacity: 0.88;
 }
 
-.about-card-accent {
-  position: absolute;
-  bottom: -1.5rem;
-  right: -1.5rem;
-  background: var(--bark);
-  border-radius: 1rem;
-  padding: 1.2rem 1.8rem;
-  color: #fff;
-}
-
-.about-card-accent .big {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2.4rem;
-  font-weight: 600;
-}
-
-.about-card-accent .small {
-  font-size: 0.78rem;
-  opacity: 0.85;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
 
 .pillars {
   margin-top: 2rem;
@@ -425,18 +380,6 @@ section { padding: 5rem 8%; }
   border-radius: 0.75rem;
   padding: 1rem 1.2rem;
   border: 1px solid var(--sand);
-}
-
-.pillar-icon {
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0;
-  background: var(--sage-light);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
 }
 
 .pillar h4 { font-size: 0.9rem; font-weight: 500; color: var(--moss); margin-bottom: 0.2rem; }
@@ -533,7 +476,7 @@ section { padding: 5rem 8%; }
   padding: 2rem;
 }
 
-.testi-card .stars { color: var(--sand); margin-bottom: 1rem; font-size: 1.1rem; letter-spacing: 0.1em; }
+/* .testi-card .stars { color: var(--sand); margin-bottom: 1rem; font-size: 1.1rem; letter-spacing: 0.1em; } */
 
 .testi-card p {
   font-family: 'Cormorant Garamond', serif;
@@ -635,7 +578,7 @@ textarea { resize: vertical; min-height: 110px; }
   max-width: 280px;
 }
 
-.hotline-icon { font-size: 1.4rem; }
+/* .hotline-icon { font-size: 1.4rem; } */
 .hotline-text .label  { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.8; color: #fff; }
 .hotline-text .number { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: #fff; }
 
@@ -724,7 +667,7 @@ footer {
   .nav-links {
     display: none;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.5rem;
     position: absolute;
     top: 100%; left: 0; right: 0;
     background: var(--warm-white);

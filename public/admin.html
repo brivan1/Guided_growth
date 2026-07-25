@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin | Guided Growth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+ 
+<!-- ══ ADMIN HEADER ══ -->
+<div class="admin-header">
+  <div class="admin-brand">Guided <span>Growth</span> &mdash; Admin</div>
+  <nav class="admin-nav">
+    <a href="index.html" target="_blank">View Site ↗</a>
+    <a href="events.html" target="_blank">View Events ↗</a>
+    <button class="logout-btn" id="logoutBtn">Sign Out</button>
+  </nav>
+</div>
+ 
+<!-- ══ STATS ══ -->
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-num" id="statTotal">—</span><span class="stat-lbl">Total Events</span></div>
+  <div class="stat-item"><span class="stat-num" id="statUpcoming">—</span><span class="stat-lbl">Upcoming</span></div>
+  <div class="stat-item"><span class="stat-num" id="statPast">—</span><span class="stat-lbl">Past</span></div>
+  <div class="stat-item"><span class="stat-num" id="statTypes">—</span><span class="stat-lbl">Event Types</span></div>
+</div>
+ 
+<!-- ══ BODY ══ -->
+<div class="admin-body">
+ 
+  <!-- FORM PANEL -->
+  <div class="form-panel">
+    <h2 id="formTitle">Add New Event</h2>
+    <input type="hidden" id="editingId" />
+ 
+    <div class="admin-form-group">
+      <label>Event Title *</label>
+      <input type="text" id="evTitle" placeholder="e.g. Mindfulness Workshop" />
+    </div>
+    <div class="form-row-2">
+      <div class="admin-form-group">
+        <label>Type *</label>
+        <select id="evType">
+          <option value="">Select…</option>
+          <option>Workshop</option>
+          <option>Support Group</option>
+          <option>Outreach</option>
+          <option>Seminar</option>
+        </select>
+      </div>
+      <div class="admin-form-group">
+        <label>Date *</label>
+        <input type="date" id="evDate" />
+      </div>
+    </div>
+    <div class="form-row-2">
+      <div class="admin-form-group">
+        <label>Time *</label>
+        <input type="text" id="evTime" placeholder="e.g. 10:00 AM – 12:00 PM" />
+      </div>
+      <div class="admin-form-group">
+        <label>Slots Available</label>
+        <input type="number" id="evSlots" placeholder="e.g. 20" min="1" />
+      </div>
+    </div>
+    <div class="admin-form-group">
+      <label>Location *</label>
+      <input type="text" id="evLocation" placeholder="e.g. Nakuru Community Hall / Online" />
+    </div>
+    <div class="admin-form-group">
+      <label>Description *</label>
+      <textarea id="evDescription" placeholder="Brief description…" style="min-height:80px;resize:vertical;"></textarea>
+    </div>
+ 
+    <div class="form-actions">
+      <button class="btn-save" id="saveBtn">Add Event</button>
+      <button class="btn-cancel-form" id="cancelBtn">Cancel</button>
+    </div>
+    <p class="form-feedback" id="formFeedback"></p>
+  </div>
+ 
+  <!-- LIST PANEL -->
+  <div class="list-panel">
+    <h2>All Events</h2>
+    <div class="list-controls">
+      <button class="list-filter active" data-filter="all">All</button>
+      <button class="list-filter" data-filter="upcoming">Upcoming</button>
+      <button class="list-filter" data-filter="past">Past</button>
+      <button class="list-filter" data-filter="Workshop">Workshops</button>
+      <button class="list-filter" data-filter="Support Group">Support Groups</button>
+      <button class="list-filter" data-filter="Outreach">Outreach</button>
+      <button class="list-filter" data-filter="Seminar">Seminars</button>
+    </div>
+    <div id="eventsList"></div>
+  </div>
+ 
+</div>
+ 
+<!-- ══ SCRIPTS ══ -->
+<script src="admin.js"></script>
+</body>
+</html>

@@ -33,6 +33,7 @@ navLinks.querySelectorAll('a').forEach(link => {
 });
 
 
+
 /*navigation scroll */
 const navbar = document.getElementById('navbar');
 

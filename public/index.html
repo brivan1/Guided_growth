@@ -26,6 +26,7 @@
   <ul class="nav-links" id="navLinks">
     <li><a href="#about">About</a></li>
     <li><a href="#services">Services</a></li>
+    <li><a href="events.html">Events</a></li>
     <li><a href="#testimonials">Stories</a></li>
     <li><a href="#gethelp" class="nav-cta">Get Help</a></li>
   </ul>
@@ -66,10 +67,6 @@
       <p>"Healing is not linear — and that's okay."</p>
       <span>— Guided Growth</span>
     </div>
-    <div class="G_G-stats-strip">
-      <span class="num">100+</span>
-      <span class="lbl">Lives Supported</span>
-    </div>
   </div>
 </section>
 
@@ -85,10 +82,6 @@
         nurturing spaces where healing begins.
       </p>
     </div>
-    <div class="about-card-accent">
-      <div class="big">4+</div>
-      <div class="small">Years of Care </div>
-    </div>
   </div>
 
   <div class="fade-up">
@@ -102,21 +95,18 @@
 
     <div class="pillars">
       <div class="pillar">
-        <div class="pillar-icon">🌱</div>
         <div>
           <h4>Safe Spaces</h4>
           <p>Confidential, judgment-free environments where you can be fully yourself.</p>
         </div>
       </div>
       <div class="pillar">
-        <div class="pillar-icon">🤝</div>
         <div>
           <h4>Community-Led</h4>
           <p>Peer support circles run by those who've walked similar paths.</p>
         </div>
       </div>
       <div class="pillar">
-        <div class="pillar-icon">🌿</div>
         <div>
           <h4>Holistic Approach</h4>
           <p>Mind, body, and community — we care for the whole person.</p>
@@ -137,33 +127,27 @@
   </div>
 
   <div class="services-grid">
-    <div class="service-card fade-up">
-      <div class="service-icon">💬</div>
+    <div class="service-card fade-up" id="service-individual">
       <h3>Individual Counselling</h3>
       <p>One-on-one sessions with licensed counsellors tailored to your personal journey and mental health goals.</p>
     </div>
-    <div class="service-card featured fade-up">
-      <div class="service-icon">🌸</div>
+    <div class="service-card featured fade-up" id="service-peer">
       <h3>Peer Support Groups</h3>
       <p>Connect with others who understand. Our moderated groups meet weekly in safe, supportive circles.</p>
     </div>
-    <div class="service-card fade-up">
-      <div class="service-icon">🧠</div>
+    <div class="service-card fade-up" id="service-education">
       <h3>Mental Health Education</h3>
       <p>Workshops and resources to help you understand your mind, reduce stigma, and build coping skills.</p>
     </div>
-    <div class="service-card fade-up">
-      <div class="service-icon">📞</div>
+    <div class="service-card fade-up" id="service-support">
       <h3>Support Line</h3>
-      <p>24/7 phone and chat support for moments when you need someone to listen right now.</p>
+      <p>reach out to our confidential support line, email or by sending a message.</p>
     </div>
-    <div class="service-card fade-up">
-      <div class="service-icon">👨‍👩‍👧</div>
+    <div class="service-card fade-up" id="service-family">
       <h3>Family & Youth Programs</h3>
       <p>Tailored sessions for families and young people navigating life's most challenging moments together.</p>
     </div>
-    <div class="service-card fade-up">
-      <div class="service-icon">🌍</div>
+    <div class="service-card fade-up" id="service-outreach">
       <h3>Community Outreach</h3>
       <p>Taking mental health conversations into schools, workplaces, and neighbourhoods across the region.</p>
     </div>
@@ -182,7 +166,6 @@
 
   <div class="testi-grid">
     <div class="testi-card fade-up">
-      <div class="stars">★★★★★</div>
       <p>"Guided Growth gave me something I hadn't felt in years — hope. The peer group became my second family."</p>
       <div class="testi-author">
         <div class="testi-avatar">A</div>
@@ -193,8 +176,8 @@
       </div>
     </div>
     <div class="testi-card fade-up">
-      <div class="stars">★★★★★</div>
-      <p>"My counsellor never made me feel judged. For the first time I could speak honestly about what I was going through."</p>
+      <p>"My counsellor never made me feel judged. 
+        For the first time I could speak honestly about what I was going through."</p>
       <div class="testi-author">
         <div class="testi-avatar">J</div>
         <div>
@@ -204,7 +187,6 @@
       </div>
     </div>
     <div class="testi-card fade-up">
-      <div class="stars">★★★★★</div>
       <p>"The youth program helped my teenager open up in ways I never imagined. We're in a completely different place now."</p>
       <div class="testi-author">
         <div class="testi-avatar">F</div>
@@ -223,13 +205,11 @@
     <div class="section-tag">Reach Out</div>
     <h2 class="section-title">Take the first<br>step today</h2>
     <p class="section-sub">
-      Whether you're in crisis or simply looking for support, we're here.
-      Fill in the form and a member of our team will respond within 24 hours.
+      Fill in the form for inquiries, program sign-ups, or to speak with a counsellor. Our team will respond promptly and confidentially. 
     </p>
     <div class="hotline">
-      <div class="hotline-icon">📞</div>
       <div class="hotline-text">
-        <div class="label">24/7 Help Line</div>
+        <div class="label">Help Line</div>
         <div class="number">+254713009252</div>
       </div>
     </div>
@@ -253,7 +233,7 @@
       </div>
       <div>        
         <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" placeholder="254..." pattern="[0-9]*" inputmode="numeric" title="Please enter only digits" />
+        <input type="tel" id="phone" placeholder="Your phone No." pattern="[0-9]*" inputmode="numeric" title="Please enter only digits" />
       </div>
       <div>
       
@@ -271,7 +251,7 @@
         <label for="message">Your Message</label>
         <textarea id="message" placeholder="Tell us a little about what you're looking for…"></textarea>
       </div>
-      <div class="form-note">🔒 All information is kept strictly confidential.</div>
+      <div class="form-note">All information is kept strictly confidential.</div>
       <button type="submit" id="submitBtn" class="btn-primary">Send Message</button>
     </form>
   </div>
@@ -289,17 +269,19 @@
     <div class="footer-col">
       <h4>Services</h4>
       <ul>
-        <li><a href="#">Individual Counselling</a></li>
-        <li><a href="#">Peer Support</a></li>
-        <li><a href="#">Youth Programs</a></li>
-        <li><a href="#">Help Line</a></li>
+        <li><a href="#service-individual">Individual Counselling</a></li>
+        <li><a href="#service-peer">Peer Support</a></li>
+        <li><a href="#service-family">Family & Youth Programs</a></li>
+        <li><a href="#service-education">Mental Health Education</a></li>
+        <li><a href="#service-support">Help Line</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Organisation</h4>
       <ul>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Our Team</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#gethelp">Contact Us</a></li>
+        <li><a href="events.html">Events</a></li>
         <li><a href="#">Volunteer</a></li>
         <li><a href="#">Donate</a></li>
       </ul>
@@ -310,7 +292,7 @@
         <!-- <li><a href="mailto:hello@guidedgrowth.org">hello@guidedgrowth.org</a></li> -->
         <li><a href="tel:+254713009252">+254713009252</a></li>
         <li><a href="https://guided-growth.vercel.app/" target="_blank" rel="noopener">Guided Growth Website</a></li>
-        <li><a href="#">Find a Centre</a></li>
+        <li><a href="#gethelp">Find a Centre</a></li>
         <li><a href="#">Referrals</a></li>
       </ul>
     </div>

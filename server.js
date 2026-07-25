@@ -12,7 +12,7 @@ app.use(cors({
   origin: [
     'https://guided-growth.vercel.app'
   ],
-  methods: ['GET', 'POST', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type']
 }));
 app.options('*', cors());
@@ -91,3 +91,4 @@ app.get('/api/contacts', async (req, res) => {
     res.status(500).json({ error: 'Failed to retrieve contacts' });
   }
 });
+
