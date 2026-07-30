@@ -173,9 +173,63 @@ function badgeClass(type) {
 function formatDate(str) {
   const d = new Date(str);
   return {
-    day:   d.getDate(),
-    month: d.toLocaleString('default', { month: 'short' }).toUpperCase()
+    day:   d.getDate().toString().padStart(2, '0'),
+    month: new Intl.DateTimeFormat('en', { month: 'short' }).format(d).toUpperCase()
   };
+}
+
+/**
+ * hasEventEnded(dateStr, timeStr)
+ *
+ * Combines the event date with its END time to determine whether the
+ * event has finished. Handles these common time formats:
+ *   "10:00 AM – 12:00 PM"   → end time is 12:00 PM
+ *   "10:00 AM - 12:00 PM"   → end time is 12:00 PM
+ *   "2:00 PM"               → single time used as-is
+ *   "14:00"                 → 24-hr format
+ *
+ * Returns true if the event end time is in the past.
+ */
+function hasEventEnded(dateStr, timeStr) {
+  const eventDate = new Date(dateStr);
+
+  /* Extract the END portion of a range, or the only time given */
+  const timePart = timeStr.includes('–') || timeStr.includes('-')
+    ? timeStr.split(/[–-]/).pop().trim()   // take everything after the dash
+    : timeStr.trim();
+
+  /* Parse 12-hr (e.g. "12:00 PM") or 24-hr (e.g. "14:00") */
+  let hours   = 0;
+  let minutes = 0;
+
+  const match12 = timePart.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+  const match24 = timePart.match(/^(\d{1,2}):(\d{2})$/);
+
+  if (match12) {
+    hours   = parseInt(match12[1], 10);
+    minutes = parseInt(match12[2], 10);
+    const period = match12[3].toUpperCase();
+    if (period === 'PM' && hours !== 12) hours += 12;
+    if (period === 'AM' && hours === 12) hours  = 0;
+  } else if (match24) {
+    hours   = parseInt(match24[1], 10);
+    minutes = parseInt(match24[2], 10);
+  } else {
+    /* Unrecognised format — fall back to date-only comparison */
+    return eventDate < new Date();
+  }
+
+  /* Build a full Date object for the event end moment */
+  const endDateTime = new Date(
+    eventDate.getFullYear(),
+    eventDate.getMonth(),
+    eventDate.getDate(),
+    hours,
+    minutes,
+    0
+  );
+
+  return endDateTime < new Date();
 }
 
 
@@ -221,12 +275,12 @@ let allEvents    = [];
 let activeFilter = 'all';
 
 function renderEvents(events) {
-  const now      = new Date();
+  /* Use hasEventEnded for accurate date+time comparison */
   const upcoming = events
-    .filter(e => new Date(e.date) >= now)
+    .filter(e => !hasEventEnded(e.date, e.time))
     .sort((a, b) => new Date(a.date) - new Date(b.date));
   const past = events
-    .filter(e => new Date(e.date) < now)
+    .filter(e => hasEventEnded(e.date, e.time))
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   /* Upcoming */
