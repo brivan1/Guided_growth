@@ -292,7 +292,6 @@ function renderEvents(events) {
   ug.innerHTML = upcoming.length
     ? upcoming.map(e => buildCard(e, false)).join('')
     : `<div class="empty-state">
-         <span class="empty-icon">📅</span>
          No upcoming events right now —
          <a href="index.html#gethelp" style="color:var(--moss)">get in touch</a> to be notified.
        </div>`;
@@ -305,7 +304,7 @@ function renderEvents(events) {
     `${past.length} event${past.length !== 1 ? 's' : ''}`;
   pg.innerHTML = past.length
     ? past.map(e => buildCard(e, true)).join('')
-    : `<div class="empty-state"><span class="empty-icon">🌿</span>No past events yet.</div>`;
+    : `<div class="empty-state">No past events yet.</div>`;
 
   /* Observe new cards for fade-in */
   document.querySelectorAll('.event-card.fade-up').forEach(el =>
@@ -342,7 +341,6 @@ async function loadEvents() {
   } catch {
     document.getElementById('upcomingLoading').innerHTML =
       `<div class="empty-state" style="grid-column:1/-1">
-         <span class="empty-icon">⚠️</span>
          Could not load events. Please try again later.
        </div>`;
     document.getElementById('pastLoading').innerHTML = '';
