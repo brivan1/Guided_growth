@@ -5,30 +5,49 @@
 
 /* ── API CONFIG ── */
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5001'
+  ? 'http://localhost:5002'
   : 'https://guided-growth-api.onrender.com';
 
-/* ── SESSION TOKEN ── */
-const SESSION_KEY = 'gg_admin_token';
-function getToken()   { return sessionStorage.getItem(SESSION_KEY); }
-function clearToken() { sessionStorage.removeItem(SESSION_KEY); }
+/* ── SESSION CHECK ── */
+async function ensureAuthenticated() {
+  try {
+    const response = await fetch(`${API_BASE}/api/admin/session`, { credentials: 'include' });
+    const data = await response.json();
+    if (!response.ok || !data.authenticated) {
+      window.location.href = 'events.html';
+      return false;
+    }
+    return true;
+  } catch {
+    window.location.href = 'events.html';
+    return false;
+  }
+}
 
-function authHeaders() {
-  return {
-    'Content-Type':  'application/json',
-    'Authorization': `Bearer ${getToken()}`
-  };
+/* ── SECURITY: HTML ESCAPE ── */
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
 /* ── Auth guard: redirect to events page if not logged in ── */
-if (!getToken()) { window.location.href = 'events.html'; }
+ensureAuthenticated();
 
 
 /* ══════════════════════════════════════════
    LOGOUT
    ══════════════════════════════════════════ */
-document.getElementById('logoutBtn').addEventListener('click', () => {
-  clearToken();
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  try {
+    await fetch(`${API_BASE}/api/admin/logout`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+  } catch {
+    // Ignore logout errors and redirect to the public page.
+  }
   window.location.href = 'events.html';
 });
 
@@ -104,8 +123,11 @@ function fmtDate(str) {
    ══════════════════════════════════════════ */
 async function loadEvents() {
   try {
-    const res = await fetch(`${API_BASE}/api/events`, { headers: authHeaders() });
-    if (res.status === 401) { clearToken(); window.location.href = 'events.html'; return; }
+    const res = await fetch(`${API_BASE}/api/events`, { credentials: 'include' });
+    if (res.status === 401) {
+      window.location.href = 'events.html';
+      return;
+    }
     allEvents = await res.json();
     updateStats();
     renderList();
@@ -156,8 +178,8 @@ function renderList() {
           <span class="rm">${mon}</span>
         </div>
         <div class="row-info">
-          <h4>${ev.title}</h4>
-          <p>${full} &middot; ${ev.location}</p>
+          <h4>${escapeHtml(ev.title)}</h4>
+          <p>${full} &middot; ${escapeHtml(ev.location)}</p>
         </div>
         <div style="display:flex;gap:.5rem;align-items:center;flex-shrink:0;">
           <span class="row-badge">${ev.type}</span>
@@ -210,7 +232,7 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
 
   if (!isEdit && hasEventEnded(date, time)) {
     const confirm = window.confirm(
-      `⚠️ The time "${time}" on this date has already passed — this event will appear under "Past Events" immediately.\n\nDo you still want to save it?`
+      `The time "${time}" on this date has already passed — this event will appear under "Past Events" immediately.\n\nDo you still want to save it?`
     );
     if (!confirm) return;
   }

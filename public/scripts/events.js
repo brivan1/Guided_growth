@@ -5,14 +5,8 @@
 
 /* ── API CONFIG ── */
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5001'
+  ? 'http://localhost:5002'
   : 'https://guided-growth-api.onrender.com';
-
-/* ── SESSION ── */
-const SESSION_KEY = 'gg_admin_token';
-function getToken()  { return sessionStorage.getItem(SESSION_KEY); }
-function setToken(t) { sessionStorage.setItem(SESSION_KEY, t); }
-
 
 /* ══════════════════════════════════════════
    NAVIGATION
@@ -59,12 +53,18 @@ const adminUserEl   = document.getElementById('adminUser');
 const adminPassEl   = document.getElementById('adminPass');
 
 /* ── Open ── */
-document.getElementById('adminAccessBtn').addEventListener('click', () => {
-  /* Already logged in → go straight to panel */
-  if (getToken()) {
-    window.location.href = 'admin.html';
-    return;
+document.getElementById('adminAccessBtn').addEventListener('click', async () => {
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/session`, { credentials: 'include' });
+    const data = await res.json();
+    if (res.ok && data.authenticated) {
+      window.location.href = 'admin.html';
+      return;
+    }
+  } catch {
+    // Fall back to the login modal if the session check cannot be completed.
   }
+
   openModal();
 });
 
@@ -115,17 +115,16 @@ async function tryLogin() {
   modalError.style.display  = 'none';
 
   try {
-    const res  = await fetch(`${API_BASE}/api/admin/login`, {
-      method:  'POST',
+    const res = await fetch(`${API_BASE}/api/admin/login`, {
+      method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password })
     });
 
     const data = await res.json();
 
-    if (res.ok && data.token) {
-      /* Success — store token and go to admin panel */
-      setToken(data.token);
+    if (res.ok && data.success) {
       window.location.href = 'admin.html';
     } else {
       showModalError(data.message || 'Incorrect username or password.');
@@ -161,6 +160,13 @@ adminUserEl.addEventListener('keydown', (e) => {
 /* ══════════════════════════════════════════
    EVENTS — HELPERS
    ══════════════════════════════════════════ */
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function badgeClass(type) {
   return {
     'Workshop':      'badge-workshop',
@@ -252,12 +258,12 @@ function buildCard(event, isPast) {
         </div>
       </div>
       <div class="event-card-body">
-        <h3>${event.title}</h3>
-        <p>${event.description}</p>
+        <h3>${escapeHtml(event.title)}</h3>
+        <p>${escapeHtml(event.description)}</p>
         <div class="event-meta">
-          <span class="meta-time">${event.time}</span>
-          <span class="meta-location">${event.location}</span>
-          ${event.slots ? `<span class="meta-slots">${event.slots} spots available</span>` : ''}
+          <span class="meta-time">${escapeHtml(event.time)}</span>
+          <span class="meta-location">${escapeHtml(event.location)}</span>
+          ${event.slots ? `<span class="meta-slots">${escapeHtml(event.slots)} spots available</span>` : ''}
         </div>
         ${isPast
           ? `<span class="btn-primary" style="text-align:center;display:block;opacity:.55;cursor:default;box-shadow:none;">Event Ended</span>`

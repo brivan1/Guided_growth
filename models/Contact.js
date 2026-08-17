@@ -8,6 +8,6 @@ const ContactSchema = new Schema({
   message: { type: String },
   submittedAt: { type: Date, default: Date.now },
   clientId: { type: Number }
-}, { strict: false });
+});
 
 module.exports = mongoose.models.Contact || mongoose.model('Contact', ContactSchema);

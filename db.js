@@ -12,8 +12,9 @@ async function connectDB() {
     await mongoose.connect(MONGODB_URI);
     console.log('Connected to MongoDB');
   } catch (err) {
-    console.error('Failed to connect to MongoDB:', err.message || err);
-    throw err;
+    console.warn('Failed to connect to MongoDB:', err.message || err);
+    console.warn('Continuing without MongoDB. Using file-based storage as fallback.');
+    // Don't throw - let the app continue with file storage fallback
   }
 }
 

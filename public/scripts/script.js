@@ -1,4 +1,4 @@
-const LOCAL_API_BASE = 'http://localhost:5001';
+const LOCAL_API_BASE = 'http://localhost:5002';
 const REMOTE_HOST = 'guided-growth-api.onrender.com';
 
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -123,3 +123,79 @@ contactForm.addEventListener('submit', async (event) => {
   }
 });
 
+
+/* LINE 127 onwards — append to end of script.js */
+
+/*slideshow */
+(function () {
+  const slides = document.querySelectorAll('.G_G-slideshow .slide');
+  const dots   = document.querySelectorAll('.G_G-slideshow .dot');
+  if (!slides.length) return;
+
+  let current = 0;
+  let timer   = null;
+
+  function goTo(index) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (index + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function startAuto() { timer = setInterval(() => goTo(current + 1), 4000); }
+  function stopAuto()  { clearInterval(timer); }
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      stopAuto(); goTo(parseInt(dot.dataset.index)); startAuto();
+    });
+  });
+
+  startAuto();
+})();
+
+/* Showcase full-width slideshow */
+(function () {
+  const slides = document.querySelectorAll('.showcase-slide');
+  const dots   = document.querySelectorAll('.showcase-dot');
+  const prev   = document.querySelector('.showcase-prev');
+  const next   = document.querySelector('.showcase-next');
+  if (!slides.length) return;
+
+  let current = 0;
+  let timer   = null;
+
+  function goTo(index) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (index + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function startAuto() { timer = setInterval(() => goTo(current + 1), 5000); }
+  function stopAuto()  { clearInterval(timer); }
+
+  prev.addEventListener('click', () => { stopAuto(); goTo(current - 1); startAuto(); });
+  next.addEventListener('click', () => { stopAuto(); goTo(current + 1); startAuto(); });
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      stopAuto(); goTo(parseInt(dot.dataset.index)); startAuto();
+    });
+  });
+
+  const showcase = document.getElementById('showcase');
+  showcase.addEventListener('mouseenter', stopAuto);
+  showcase.addEventListener('mouseleave', startAuto);
+
+  let touchStartX = 0;
+  showcase.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  showcase.addEventListener('touchend',   e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) { stopAuto(); goTo(diff > 0 ? current + 1 : current - 1); startAuto(); }
+  });
+
+  startAuto();
+})();

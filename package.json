@@ -3,10 +3,15 @@
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
+    "connect-mongo": "^4.0.0",
     "cors": "^2.8.6",
+    "csurf": "^1.11.0",
     "dotenv": "^16.1.4",
     "express": "^4.19.2",
-    "mongodb": "^7.4.0",
+    "express-rate-limit": "^7.1.0",
+    "express-session": "^1.17.4",
+    "helmet": "^7.1.0",
+    "mongodb": "^4.17.2",
     "mongoose": "^7.5.0"
   },
   "scripts": {

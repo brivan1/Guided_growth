@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Guided Growth | Mental Health Community</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/styles/styles.css" />
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BSDBLH5GW4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-BSDBLH5GW4');
 </script>
 </head>
@@ -21,7 +20,7 @@
 <!--NAVIGATION-->
 <nav id="navbar">
   <a class="nav-logo" href="#G_G">
-    <img src="GG_logo.jpg" alt="Guided Growth Logo" class="logo-img">
+    <img src="/images/GG_logo.jpg" alt="Guided Growth Logo" class="logo-img">
   </a>
   <ul class="nav-links" id="navLinks">
     <li><a href="#about">About</a></li>
@@ -37,10 +36,9 @@
 
 <!--G_G-->
 <section id="G_G">
-  <div class="G_G-left">
     <div class="G_G-tag">Therapy & Wellness</div>
     <h1 class="G_G-title">
-      Healing meets
+      Healing Meets
       <em>Growth.</em>
     </h1>
     <p class="G_G-sub">
@@ -51,24 +49,52 @@
     <div class="G_G-actions">
       <a href="#gethelp" class="btn-primary">Reach Out Today</a>
       <a href="#services" class="btn-ghost">Our Services</a>
-    </div>
-  </div>
+    </div>  
+</section>
 
-  <div class="G_G-right">
-    <div class="G_G-art">
-      <div class="circle-bg"></div>
-      <div class="stem"></div>
-      <div class="leaf leaf-1"></div>
-      <div class="leaf leaf-2"></div>
-      <div class="leaf leaf-3"></div>
-      <div class="leaf leaf-4"></div>
+<!-- FULL-WIDTH SLIDESHOW SECTION between G_G and About -->
+<div id="showcase">
+  <div class="showcase-slideshow">
+    <div class="showcase-slide active">
+      <img src="/images/G_G@DT.jpeg" alt="A calm therapy space" />
+      <div class="showcase-overlay">
+        <p class="showcase-caption">A safe space for every journey</p>
+      </div>
     </div>
-    <div class="G_G-quote-card">
+    <div class="showcase-slide">
+      <img src="/images/G_G@NP.jpeg" alt="Community wellness scene" />
+      <div class="showcase-overlay">
+        <p class="showcase-caption">Building community, one connection at a time</p>
+      </div>
+    </div>
+    <div class="showcase-slide fit-image">
+      <img src="/images/G_G@OR.jpeg" alt="Supportive group setting" />
+      <div class="showcase-overlay">
+        <p class="showcase-caption">Healing begins when you reach out</p>
+      </div>
+    </div>
+    <div class="showcase-slide">
+      <img src="/images/G_G@DT.jpeg" alt="Guided Growth message" />
+      <div class="showcase-overlay">
+        <p class="showcase-caption">Growing together, guided by purpose</p>
+      </div>
+    </div>
+    <!-- <div class="G_G-quote-card">
       <p>"Healing is not linear — and that's okay."</p>
       <span>— Guided Growth</span>
+    </div> -->
+  </div>
+    <!-- Controls -->
+    <button class="showcase-prev" aria-label="Previous">&#8592;</button>
+    <button class="showcase-next" aria-label="Next">&#8594;</button>
+    <div class="showcase-dots">
+      <span class="showcase-dot active" data-index="0"></span>
+      <span class="showcase-dot"        data-index="1"></span>
+      <span class="showcase-dot"        data-index="2"></span>
+      <span class="showcase-dot"        data-index="3"></span>
     </div>
   </div>
-</section>
+</div>
 
 <!--ABOUT-->
 <section id="about">
@@ -131,7 +157,7 @@
       <h3>Individual Counselling</h3>
       <p>One-on-one sessions with licensed counsellors tailored to your personal journey and mental health goals.</p>
     </div>
-    <div class="service-card featured fade-up" id="service-peer">
+    <div class="service-card fade-up" id="service-peer">
       <h3>Peer Support Groups</h3>
       <p>Connect with others who understand. Our moderated groups meet weekly in safe, supportive circles.</p>
     </div>
@@ -262,7 +288,7 @@
   <div class="footer-grid">
     <div class="footer-brand">
       <span class="logo">
-        <img src="GG_logo.jpg" alt="Guided Growth Logo" class="logo-img">
+        <img src="/images/GG_logo.jpg" alt="Guided Growth Logo" class="logo-img">
       </span>
       <p>A community rooted in compassion, dedicated to making mental health support accessible to all who need it.</p>
     </div>
@@ -302,6 +328,6 @@
     <span>Privacy Policy · Terms of Use · Accessibility</span>
   </div>
 </footer>
-<script src="script.js"></script>
+<script src="/scripts/script.js"></script>
 </body>
 </html>
