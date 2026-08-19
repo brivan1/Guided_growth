@@ -5,6 +5,7 @@ const cors         = require('cors');
 const path         = require('path');
 const crypto       = require('crypto');
 const session      = require('express-session');
+const bcrypt       = require('bcrypt');
 const MongoStore   = require('connect-mongo');
 const rateLimit    = require('express-rate-limit');
 const helmet       = require('helmet');
@@ -211,10 +212,9 @@ app.post('/api/admin/login', loginLimiter, (req, res) => {
   const { username, password } = req.body;
   const validUser = process.env.ADMIN_USERNAME;
   const validPassHash = process.env.ADMIN_PASSWORD_HASH;
-  const validPassSalt = process.env.ADMIN_PASSWORD_SALT;
 
-  if (!validUser || !validPassHash || !validPassSalt) {
-    console.error('Admin credentials are not configured. Set ADMIN_USERNAME and ADMIN_PASSWORD_HASH + ADMIN_PASSWORD_SALT.');
+  if (!validUser || !validPassHash) {
+    console.error('Admin credentials are not configured. Set ADMIN_USERNAME and ADMIN_PASSWORD_HASH in your .env file.');
     return res.status(500).json({ success: false, message: 'Admin authentication is not configured.' });
   }
 
@@ -222,14 +222,13 @@ app.post('/api/admin/login', loginLimiter, (req, res) => {
     return res.status(401).json({ success: false, message: 'Incorrect username or password.' });
   }
 
-  let passwordOk = false;
+  let passwordOk;
   try {
-    const expected = Buffer.from(validPassHash, 'hex');
-    const derived = crypto.scryptSync(password, validPassSalt, expected.length);
-    passwordOk = derived.length === expected.length && crypto.timingSafeEqual(derived, expected);
+    // bcrypt.compare is designed to be safe against timing attacks
+    passwordOk = bcrypt.compareSync(password, validPassHash);
   } catch (err) {
-    console.error('Error validating admin password hash:', err);
-    passwordOk = false;
+    console.error('Error during bcrypt comparison:', err);
+    return res.status(500).json({ success: false, message: 'Error during authentication.' });
   }
 
   if (!passwordOk) {
