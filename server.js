@@ -112,6 +112,11 @@ const publicLimiter = rateLimit({
   message: { success: false, message: 'Too many requests. Please try again later.' }
 });
 
+const csrfLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 20, // Allow a reasonable number of token refreshes
+});
+
 /* ──────────────────────────────────────────
    DATABASE
    ────────────────────────────────────────── */
@@ -260,9 +265,13 @@ app.post('/api/admin/logout', (req, res) => {
    CSRF TOKEN ENDPOINT
    GET /api/csrf-token
    ────────────────────────────────────────── */
-app.get('/api/csrf-token', csrfProtection, (req, res) => {
+app.get('/api/csrf-token', csrfLimiter, csrfProtection, (req, res) => {
   res.json({ csrfToken: req.csrfToken() });
 });
+
+// Middleware group for protected, state-changing routes
+const protectedWriteRoute = [requireAuth, csrfProtection, publicLimiter];
+
 
 /* ──────────────────────────────────────────
    CONTACT FORM  (public)
@@ -342,7 +351,7 @@ app.get('/api/events', async (req, res) => {
   }
 });
 
-app.post('/api/events', requireAuth, csrfProtection, publicLimiter, async (req, res) => {
+app.post('/api/events', protectedWriteRoute, async (req, res) => {
   try {
     const clean = sanitizeEventBody(req.body || {});
     if (!clean.title || !clean.type || !clean.date || !clean.time || !clean.location || !clean.description) {
@@ -355,7 +364,7 @@ app.post('/api/events', requireAuth, csrfProtection, publicLimiter, async (req, 
   }
 });
 
-app.put('/api/events/:id', requireAuth, csrfProtection, publicLimiter, async (req, res) => {
+app.put('/api/events/:id', protectedWriteRoute, async (req, res) => {
   try {
     const clean = sanitizeEventBody(req.body || {});
     const event = await Event.findByIdAndUpdate(req.params.id, clean, { new: true, runValidators: true });
@@ -366,7 +375,7 @@ app.put('/api/events/:id', requireAuth, csrfProtection, publicLimiter, async (re
   }
 });
 
-app.delete('/api/events/:id', requireAuth, csrfProtection, publicLimiter, async (req, res) => {
+app.delete('/api/events/:id', protectedWriteRoute, async (req, res) => {
   try {
     await Event.findByIdAndDelete(req.params.id);
     res.json({ success: true });
