@@ -29,8 +29,8 @@
     <li><a href="#testimonials">Stories</a></li>
     <li><a href="#gethelp" class="nav-cta">Get Help</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
+  <button class="hamburger" id="hamburger" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navLinks">
+    GG <span aria-hidden="true">▾</span>
   </button>
 </nav>
 
@@ -236,72 +236,76 @@
 
 <!--GET HELP-->
 <section id="gethelp">
-  <div class="fade-up">
-    <div class="section-tag">Reach Out</div>
-    <h2 class="section-title">Take the first<br>step today</h2>
-    <p class="section-sub">
-      Fill in the form for inquiries, program sign-ups, or to speak with a counsellor. Our team will respond promptly and confidentially. 
-    </p>
-    <div class="hotline">
+  <div class="container">
+    <div class="fade-up">
+      <p class="form-section">
+        Fill in the form for inquiries, program sign-ups, or to speak with a counsellor.
+        We are dedicated to serve you promptly and confidentially. 
+      </p>
+      <!-- <div class="hotline">
       <div class="hotline-text">
         <div class="label">Help Line</div>
         <div class="number">+254713009252</div>
       </div>
+    </div> -->
+    <div class="fade-up">
+      <form id="contactForm">
+        <div class="form-row">
+          <div>
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" placeholder="Your first name" />
+          </div>
+          <div>
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" placeholder="Your last name" />
+          </div>
+        </div>
+        <div>
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="you@example.com" />
+        </div>
+        <div>     
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" placeholder="Your phone No." pattern="[0-9]*" inputmode="numeric" title="Please enter only digits" />
+        </div>
+
+        <div>
+      
+          <label for="service">I'm interested in</label>
+          <select id="service">
+            <option value="">Select a service…</option>
+            <option>Individual Counselling</option>
+            <option>Peer Support Group</option>
+            <option>Family & Youth Program</option>
+            <option>Crisis Support</option>
+            <option>General Information</option>
+          </select>
+        </div>
+        <div>
+          <label for="message">Your Message</label>
+          <textarea id="message" placeholder="Tell us a little about what you're looking for…"></textarea>
+        </div>
+        <div class="form-note">All information is kept strictly confidential.</div>
+        <button type="submit" id="submitBtn" class="btn-primary">Send Message</button>
+      </form>
+      </div>
     </div>
   </div>
-
-  <div class="fade-up">
-    <form id="contactForm">
-      <div class="form-row">
-        <div>
-          <label for="fname">First Name</label>
-          <input type="text" id="fname" placeholder="Your first name" />
-        </div>
-        <div>
-          <label for="lname">Last Name</label>
-          <input type="text" id="lname" placeholder="Your last name" />
-        </div>
-      </div>
-      <div>
-        <label for="email">Email Address</label>
-        <input type="email" id="email" placeholder="you@example.com" />
-      </div>
-      <div>        
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" placeholder="Your phone No." pattern="[0-9]*" inputmode="numeric" title="Please enter only digits" />
-      </div>
-      <div>
-      
-        <label for="service">I'm interested in</label>
-        <select id="service">
-          <option value="">Select a service…</option>
-          <option>Individual Counselling</option>
-          <option>Peer Support Group</option>
-          <option>Family & Youth Program</option>
-          <option>Crisis Support</option>
-          <option>General Information</option>
-        </select>
-      </div>
-      <div>
-        <label for="message">Your Message</label>
-        <textarea id="message" placeholder="Tell us a little about what you're looking for…"></textarea>
-      </div>
-      <div class="form-note">All information is kept strictly confidential.</div>
-      <button type="submit" id="submitBtn" class="btn-primary">Send Message</button>
-    </form>
-  </div>
+  
+  
 </section>
 
 <!--FOOTER-->
 <footer>
-  <div class="footer-grid">
+  <div class="container">
     <div class="footer-brand">
       <span class="logo">
         <img src="/images/GG_logo.jpg" alt="Guided Growth Logo" class="logo-img">
       </span>
       <p>A community rooted in compassion, dedicated to making mental health support accessible to all who need it.</p>
     </div>
-    <div class="footer-col">
+    <div class="row">
+      <div class="footer-col">
       <h4>Services</h4>
       <ul>
         <li><a href="#service-individual">Individual Counselling</a></li>
@@ -310,32 +314,34 @@
         <li><a href="#service-education">Mental Health Education</a></li>
         <li><a href="#service-support">Help Line</a></li>
       </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Organisation</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#gethelp">Contact Us</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="#">Volunteer</a></li>
+          <li><a href="#">Donate</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <!-- <li><a href="mailto:hello@guidedgrowth.org">hello@guidedgrowth.org</a></li> -->
+          <li><a href="tel:+254713009252">+254713009252</a></li>
+          <li><a href="https://guided-growth.vercel.app/" target="_blank" rel="noopener">Guided Growth Website</a></li>
+          <li><a href="#gethelp">Find a Centre</a></li>
+          <li><a href="#">Referrals</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="footer-col">
-      <h4>Organisation</h4>
-      <ul>
-        <li><a href="#about">About Us</a></li>
-        <li><a href="#gethelp">Contact Us</a></li>
-        <li><a href="events.html">Events</a></li>
-        <li><a href="#">Volunteer</a></li>
-        <li><a href="#">Donate</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <ul>
-        <!-- <li><a href="mailto:hello@guidedgrowth.org">hello@guidedgrowth.org</a></li> -->
-        <li><a href="tel:+254713009252">+254713009252</a></li>
-        <li><a href="https://guided-growth.vercel.app/" target="_blank" rel="noopener">Guided Growth Website</a></li>
-        <li><a href="#gethelp">Find a Centre</a></li>
-        <li><a href="#">Referrals</a></li>
-      </ul>
+    <div class="footer-bottom">
+      <span>© 2026 Guided Growth. All rights reserved.</span>
+      <span>Privacy Policy · Terms of Use · Accessibility</span>
     </div>
   </div>
-  <div class="footer-bottom">
-    <span>© 2026 Guided Growth. All rights reserved.</span>
-    <span>Privacy Policy · Terms of Use · Accessibility</span>
-  </div>
+  
 </footer>
 <script src="/scripts/script.js"></script>
 </body>
