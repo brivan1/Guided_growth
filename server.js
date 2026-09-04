@@ -29,12 +29,12 @@ app.use(cors({
     'https://guided-growth.vercel.app'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'CSRF-Token'],
   credentials: true
 }));
 app.options('*', cors({ credentials: true }));
 app.use(helmet());
-app.use(express.json());
+app.use(express.json({ limit: '6mb' }));
 
 const sessionSecret = process.env.SESSION_SECRET || 'change-this-secret';
 let sessionStore = undefined;
@@ -135,7 +135,8 @@ const eventSchema = new mongoose.Schema(
     time:        { type: String, required: true },
     location:    { type: String, required: true, trim: true },
     description: { type: String, required: true, trim: true },
-    slots:       { type: String, default: '' }
+    slots:       { type: String, default: '' },
+    poster:      { type: String, default: '' }
   },
   { timestamps: true }
 );
@@ -169,8 +170,16 @@ function sanitizeEventBody(body) {
     time:        sanitizeString(body.time),
     location:    sanitizeString(body.location),
     description: sanitizeString(body.description),
-    slots:       sanitizeString(body.slots || '')
+    slots:       sanitizeString(body.slots || ''),
+    poster:      sanitizeString(body.poster || '')
   };
+}
+
+function isValidPoster(poster) {
+  return !poster || (
+    poster.length <= 5 * 1024 * 1024 &&
+    /^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+/]+={0,2}$/.test(poster)
+  );
 }
 
 function validateEmail(email) {
@@ -357,6 +366,9 @@ app.post('/api/events', protectedWriteRoute, async (req, res) => {
     if (!clean.title || !clean.type || !clean.date || !clean.time || !clean.location || !clean.description) {
       return res.status(400).json({ success: false, message: 'Missing required event fields.' });
     }
+    if (!isValidPoster(clean.poster)) {
+      return res.status(400).json({ success: false, message: 'Poster must be a valid image smaller than 4 MB.' });
+    }
     const event = await Event.create(clean);
     res.status(201).json({ success: true, event });
   } catch (err) {
@@ -367,6 +379,9 @@ app.post('/api/events', protectedWriteRoute, async (req, res) => {
 app.put('/api/events/:id', protectedWriteRoute, async (req, res) => {
   try {
     const clean = sanitizeEventBody(req.body || {});
+    if (!isValidPoster(clean.poster)) {
+      return res.status(400).json({ success: false, message: 'Poster must be a valid image smaller than 4 MB.' });
+    }
     const event = await Event.findByIdAndUpdate(req.params.id, clean, { new: true, runValidators: true });
     if (!event) return res.status(404).json({ success: false, message: 'Event not found.' });
     res.json({ success: true, event });
@@ -382,6 +397,20 @@ app.delete('/api/events/:id', protectedWriteRoute, async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
+});
+
+/* Return JSON for body-parser and CSRF errors instead of Express HTML pages. */
+app.use((err, req, res, next) => {
+  if (err && (err.type === 'entity.too.large' || err.code === 'EBADCSRFTOKEN' || err instanceof SyntaxError)) {
+    const status = err.type === 'entity.too.large' ? 413 : 400;
+    const message = err.type === 'entity.too.large'
+      ? 'Poster request is too large. Please choose an image smaller than 4 MB.'
+      : err.code === 'EBADCSRFTOKEN'
+        ? 'Security token expired. Refresh the page and try again.'
+        : 'Invalid request body.';
+    return res.status(status).json({ success: false, message });
+  }
+  next(err);
 });
 
 /* ──────────────────────────────────────────

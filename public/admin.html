@@ -74,6 +74,12 @@
       <label>Description *</label>
       <textarea id="evDescription" placeholder="Brief description…" style="min-height:80px;resize:vertical;"></textarea>
     </div>
+    <div class="admin-form-group">
+      <label for="evPoster">Event Poster</label>
+      <input type="file" id="evPoster" accept="image/jpeg,image/png,image/webp,image/gif" />
+      <small class="poster-help">Optional image, up to 4 MB.</small>
+      <img id="posterPreview" class="poster-preview" alt="Poster preview" hidden />
+    </div>
  
     <div class="form-actions">
       <button class="btn-save" id="saveBtn">Add Event</button>

@@ -114,6 +114,23 @@
 }
  
 .admin-form-group { margin-bottom: 1rem; }
+
+.poster-help {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.poster-preview {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  margin-top: 0.75rem;
+  border: 1px solid var(--sand);
+  border-radius: 0.5rem;
+}
  
 .admin-form-group label {
   display: block;

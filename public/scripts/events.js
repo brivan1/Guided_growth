@@ -19,12 +19,16 @@ window.addEventListener('scroll', () =>
   navbar.classList.toggle('scrolled', window.scrollY > 20)
 );
 
-hamburger.addEventListener('click', () =>
-  navLinks.classList.toggle('open')
-);
+hamburger.addEventListener('click', () => {
+  const isOpen = navLinks.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', String(isOpen));
+});
 
-navLinks.querySelectorAll('a').forEach(a =>
-  a.addEventListener('click', () => navLinks.classList.remove('open'))
+navLinks.querySelectorAll('a, button').forEach(el =>
+  el.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  })
 );
 
 
@@ -257,6 +261,7 @@ function buildCard(event, isPast) {
           ${isPast ? '<span class="past-label">Completed</span>' : ''}
         </div>
       </div>
+      ${event.poster ? `<img class="event-poster" src="${escapeHtml(event.poster)}" alt="${escapeHtml(event.title)} poster">` : ''}
       <div class="event-card-body">
         <h3>${escapeHtml(event.title)}</h3>
         <p>${escapeHtml(event.description)}</p>

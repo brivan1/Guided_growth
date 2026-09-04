@@ -102,6 +102,20 @@ function hasEventEnded(dateStr, timeStr) {
 let allEvents    = [];
 let activeFilter = 'all';
 let editingId    = null;
+let posterData   = '';
+let csrfToken    = '';
+
+function authHeaders() {
+  return { 'Content-Type': 'application/json', 'CSRF-Token': csrfToken };
+}
+
+async function ensureCsrfToken() {
+  if (csrfToken) return;
+  const response = await fetch(`${API_BASE}/api/csrf-token`, { credentials: 'include' });
+  const data = await response.json();
+  if (!response.ok || !data.csrfToken) throw new Error('Could not prepare the form securely.');
+  csrfToken = data.csrfToken;
+}
 
 function fmtDate(str) {
   const d = new Date(str);
@@ -244,10 +258,11 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
   saveBtn.disabled    = true;
 
   try {
+    await ensureCsrfToken();
     const res = await fetch(url, {
       method,
       headers: authHeaders(),
-      body: JSON.stringify({ title, type, date, time, location, description, slots: slots || '' })
+      body: JSON.stringify({ title, type, date, time, location, description, slots: slots || '', poster: posterData })
     });
 
     if (res.status === 401) { clearToken(); window.location.href = 'events.html'; return; }
@@ -259,8 +274,15 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
       await loadEvents();
       setTimeout(() => { feedback.textContent = ''; }, 3000);
     } else {
-      const err = await res.json();
-      throw new Error(err.message || 'Server error');
+      const responseText = await res.text();
+      let message = `Server error (${res.status})`;
+      try {
+        const err = JSON.parse(responseText);
+        message = err.message || message;
+      } catch {
+        message = `Server returned an unexpected response (${res.status}). Please refresh and try again.`;
+      }
+      throw new Error(message);
     }
   } catch (err) {
     feedback.textContent = `Error: ${err.message}`;
@@ -287,6 +309,8 @@ function startEdit(id) {
   document.getElementById('evLocation').value    = ev.location;
   document.getElementById('evDescription').value = ev.description;
   document.getElementById('evSlots').value       = ev.slots || '';
+  posterData = ev.poster || '';
+  showPosterPreview(posterData);
 
   document.getElementById('formTitle').textContent    = 'Edit Event';
   document.getElementById('saveBtn').textContent      = 'Save Changes';
@@ -298,18 +322,48 @@ document.getElementById('cancelBtn').addEventListener('click', clearForm);
 
 function clearForm() {
   editingId = null;
+  posterData = '';
   ['evTitle', 'evTime', 'evLocation', 'evDescription'].forEach(id => {
     document.getElementById(id).value = '';
   });
   document.getElementById('evType').value  = '';
   document.getElementById('evDate').value  = '';
   document.getElementById('evSlots').value = '';
+  document.getElementById('evPoster').value = '';
+  showPosterPreview('');
 
   document.getElementById('formTitle').textContent    = 'Add New Event';
   document.getElementById('saveBtn').textContent      = 'Add Event';
   document.getElementById('saveBtn').disabled         = false;
   document.getElementById('cancelBtn').style.display  = 'none';
   document.getElementById('formFeedback').textContent = '';
+}
+
+document.getElementById('evPoster').addEventListener('change', (event) => {
+  const file = event.target.files[0];
+  const feedback = document.getElementById('formFeedback');
+
+  if (!file) return;
+  if (file.size > 4 * 1024 * 1024) {
+    feedback.textContent = 'Poster must be smaller than 4 MB.';
+    feedback.style.color = '#c0392b';
+    event.target.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    posterData = reader.result;
+    showPosterPreview(posterData);
+    feedback.textContent = '';
+  };
+  reader.readAsDataURL(file);
+});
+
+function showPosterPreview(data) {
+  const preview = document.getElementById('posterPreview');
+  preview.src = data || '';
+  preview.hidden = !data;
 }
 
 
@@ -319,6 +373,7 @@ function clearForm() {
 async function deleteEvent(id) {
   if (!confirm('Delete this event? This cannot be undone.')) return;
   try {
+    await ensureCsrfToken();
     const res = await fetch(`${API_BASE}/api/events/${id}`, {
       method:  'DELETE',
       headers: authHeaders()

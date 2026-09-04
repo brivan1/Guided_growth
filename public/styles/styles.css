@@ -4,7 +4,7 @@
   --sage-light: #b8d4bb;
   --cream:      #f5f0e8;
   --warm-white: #faf7f2;
-  --bark:       #6b4f3a;
+  --bark:       #ce7f0ae0;
   --sand:       #d4c5a9;
   --charcoal:   #2c2c2c;
   --text-muted: #6b6460;
@@ -42,6 +42,12 @@ nav {
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--sand);
   transition: box-shadow 0.3s;
+}
+
+.nav-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 
 nav.scrolled {
@@ -134,11 +140,11 @@ nav.scrolled {
   line-height: 1;
 }
 
-.hamburger:hover {
+/* .hamburger:hover {
   border-color: var(--moss);
   background: rgba(61, 90, 62, 0.06);
   box-shadow: 0 4px 12px rgba(61, 90, 62, 0.1);
-}
+} */
 
 /* .hamburger span {
   display: inline-block;
@@ -836,28 +842,28 @@ footer {
 
 /*RESPONSIVE — phones (≤ 700px) */
 @media (max-width: 700px) {
-  nav { padding: 1rem 5%; }
+  nav { padding: 0rem; }
 
   /* Mobile nav dropdown */
   .nav-links {
-    /* display: none; */
+    display: flex;
     flex-direction: column;
     gap: 0.5rem;
     position: absolute;
-    top: calc(100% + 0.8rem);
-    right: 1rem;
+    top: calc(58% + 0.1rem);
+    right: 0;
     left: auto;
     min-width: 180px;
     background: rgba(250, 247, 242, 0.98);
     padding: 0.8rem;
-    border: 1px solid rgba(107, 79, 58, 0.15);
-    border-radius: 0.75rem;
+    /* border: 1px solid rgba(107, 79, 58, 0.15); */
+    border-radius: 0.2rem;
     box-shadow: 0 16px 32px rgba(61, 90, 62, 0.15);
     z-index: 110;
     opacity: 0;
-    transform-origin: top right;
-    transform: translateY(-12px) scale(0.96);
-    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+    transform-origin: center;
+    transform: translateY(-8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
     visibility: hidden;
     pointer-events: none;
     backdrop-filter: blur(10px);
@@ -878,14 +884,14 @@ footer {
     display: flex;
     opacity: 1;
     visibility: visible;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
     pointer-events: auto;
   }
 
   .nav-links a:hover {
-  border-color: var(--moss);
-  background: rgba(61, 90, 62, 0.06);
-}
+    border-color: var(--moss);
+    background: rgba(61, 90, 62, 0.06);
+  }
 
   .nav-links .nav-cta {
     text-align: center;
