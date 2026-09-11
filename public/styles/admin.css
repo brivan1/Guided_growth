@@ -1,9 +1,4 @@
-/* ══════════════════════════════════════════
-   GUIDED GROWTH — admin.css
-   Styles for admin.html only
-   ══════════════════════════════════════════ */
- 
-/* ── ADMIN HEADER ── */
+ /* ── ADMIN HEADER ── */
 .admin-header {
   background: var(--moss);
   color: #fff;

@@ -8,17 +8,6 @@ const API_BASE = window.location.hostname === 'localhost' || window.location.hos
 console.log('DEBUG: window.location.hostname =', window.location.hostname);
 console.log('DEBUG: API_BASE =', API_BASE);
 
-const STORAGE_KEY = 'guidedGrowthContactSubmissions';
-
-function saveSubmissionLocally(submission) {
-  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  saved.push({
-    ...submission,
-    savedAt: new Date().toISOString()
-  });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
-}
-
 const hamburger = document.getElementById('hamburger');
 const navLinks  = document.getElementById('navLinks');
 
@@ -93,8 +82,6 @@ contactForm.addEventListener('submit', async (event) => {
   // Set loading state
   submitBtn.textContent = 'Sending...';
   submitBtn.disabled           = true;
-
-  saveSubmissionLocally(formData);
 
   try {
     console.log('DEBUG: Posting to', `${API_BASE}/api/contact`);

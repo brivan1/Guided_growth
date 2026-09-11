@@ -200,11 +200,18 @@ function renderList() {
           ${ended ? '<span class="row-badge" style="color:#c0392b;border-color:#e8a09a;">Ended</span>' : '<span class="row-badge" style="color:var(--moss);border-color:var(--sage);">Upcoming</span>'}
         </div>
         <div class="row-actions">
-          <button class="btn-edit"   onclick="startEdit('${ev._id}')">Edit</button>
-          <button class="btn-delete" onclick="deleteEvent('${ev._id}')">Delete</button>
+          <button class="btn-edit" data-event-id="${ev._id}">Edit</button>
+          <button class="btn-delete" data-event-id="${ev._id}">Delete</button>
         </div>
       </div>`;
   }).join('');
+
+  list.querySelectorAll('.btn-edit').forEach(button => {
+    button.addEventListener('click', () => startEdit(button.dataset.eventId));
+  });
+  list.querySelectorAll('.btn-delete').forEach(button => {
+    button.addEventListener('click', () => deleteEvent(button.dataset.eventId));
+  });
 }
 
 /* List filter tabs */
